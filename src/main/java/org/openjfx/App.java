@@ -6,9 +6,11 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 
@@ -16,18 +18,18 @@ import javafx.stage.Stage;
  * JavaFX App
  */
 public class App extends Application {
+    
 
     TextField[][] textFields = new TextField[9][9];
 
     @Override
     public void start(Stage stage) {
-
         //9x9 Grid
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(25,25,25,25));
+        grid.setHgap(5);
+        grid.setVgap(5);
+        grid.setPadding(new Insets(25,50,25,50));
         //Inserting text fields into grid
         for(int r = 0; r<9; r++)
         {
@@ -41,12 +43,20 @@ public class App extends Application {
             }
         }
 
+        //Sudoku Text Label
+        Label textLabel = new Label("Sudoku Solver");
+        textLabel.setFont(new Font("Roboto",16));
+        HBox hbBox = new HBox(10);
+        hbBox.getChildren().add(textLabel);
+        hbBox.setAlignment(Pos.BOTTOM_LEFT);
+        grid.add(hbBox,0,9,9,1);
+
         //Clear Button
         Button clearBtn = new Button("Clear");
-        HBox hbBox = new HBox(10);
+        hbBox = new HBox(10);
         hbBox.getChildren().add(clearBtn);
         hbBox.setAlignment(Pos.BOTTOM_LEFT);
-        grid.add(hbBox,0,9,3,1);
+        grid.add(hbBox,0,10,3,1);
 
         clearBtn.setOnAction((ActionEvent event) -> {
             for(int r = 0; r<9; r++)
@@ -64,7 +74,7 @@ public class App extends Application {
         hbBox = new HBox(10);
         hbBox.getChildren().add(solveBtn);
         hbBox.setAlignment(Pos.BOTTOM_RIGHT);
-        grid.add(hbBox,6,9,3,1);
+        grid.add(hbBox,6,10,3,1);
 
         solveBtn.setOnAction((ActionEvent event) -> {
             for(int r = 0; r<9; r++)
@@ -74,12 +84,14 @@ public class App extends Application {
                     //testing, temp values, will add functionality later :3
                     textFields[c][r].setText("");
                     textFields[c][r].setStyle("-fx-background-color:rgb(144, 209, 128)");
-                } 
+                }
             }
         });
 
-        var scene = new Scene(grid, 400,400);
+        var scene = new Scene(grid,400,500);
         stage.setScene(scene);
+        stage.setResizable(false);
+        stage.setTitle("Sudoku Solver");
         stage.show();
     }
 
