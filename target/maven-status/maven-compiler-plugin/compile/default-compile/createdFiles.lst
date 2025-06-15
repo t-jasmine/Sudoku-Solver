@@ -1,0 +1,4 @@
+module-info.class
+org\openjfx\App.class
+org\openjfx\Board.class
+org\openjfx\SystemInfo.class
