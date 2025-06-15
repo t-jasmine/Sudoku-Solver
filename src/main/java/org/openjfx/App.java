@@ -41,8 +41,9 @@ public class App extends Application {
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(5);
         grid.setVgap(5);
-        grid.setPadding(new Insets(25,50,25,50));
-        //Inserting text fields into grid
+        grid.setPadding(new Insets(25,45,25,45));
+
+        //Inserting text fields into the grid
         for(int r = 0; r<9; r++)
         {
             for(int c = 0; c<9; c++)
@@ -58,18 +59,15 @@ public class App extends Application {
         //Sudoku Text Label
         Label textLabel = new Label("Sudoku Solver");
         textLabel.setFont(headerFont);
-        HBox hbBox = new HBox(10);
-        hbBox.getChildren().add(textLabel);
-        hbBox.setAlignment(Pos.BOTTOM_LEFT);
-        grid.add(hbBox,0,9,9,1);
+        HBox titleBox = new HBox(10);
+        titleBox.getChildren().add(textLabel);
+        titleBox.setAlignment(Pos.BOTTOM_LEFT);
+        titleBox.setPadding(new Insets(10,0,0,0));
+        grid.add(titleBox,0,9,9,1);
 
         //Clear Button
         Button clearBtn = new Button("Clear");
         clearBtn.setFont(textFont);
-        hbBox = new HBox(10);
-        hbBox.getChildren().add(clearBtn);
-        hbBox.setAlignment(Pos.BOTTOM_LEFT);
-        grid.add(hbBox,0,10,3,1);
 
         clearBtn.setOnAction((ActionEvent event) -> {
             for(int r = 0; r<9; r++)
@@ -84,10 +82,6 @@ public class App extends Application {
         //Solve Button
         Button solveBtn = new Button("Solve");
         solveBtn.setFont(textFont);
-        hbBox = new HBox(10);
-        hbBox.getChildren().add(solveBtn);
-        hbBox.setAlignment(Pos.BOTTOM_RIGHT);
-        grid.add(hbBox,6,10,3,1);
 
         solveBtn.setOnAction((ActionEvent event) -> {
             for(int r = 0; r<9; r++)
@@ -96,11 +90,18 @@ public class App extends Application {
                 {
                     //testing, temp values, will add functionality later :3
                     textFields[c][r].setText("");
-                    textFields[c][r].setStyle("-fx-background-color:rgb(150, 235, 100); -fx-background-radius:0; -fx-border-width: 1; -fx-border-color: rgb(60, 185, 60);");
+                    textFields[c][r].setStyle("-fx-background-color:rgb(150, 235, 100); -fx-background-radius:0; -fx-border-width: 1; -fx-border-color: rgb(50, 140, 50);");
                 }
             }
         });
 
+        //Adding buttons to the grid
+        HBox buttonBox = new HBox(10);
+        buttonBox.getChildren().addAll(clearBtn, solveBtn);
+        buttonBox.setAlignment(Pos.BOTTOM_LEFT);
+        grid.add(buttonBox,0,10,9,1);
+        
+        //Setting up the stage
         var scene = new Scene(grid,400,500);
         stage.setScene(scene);
         stage.setResizable(false);
