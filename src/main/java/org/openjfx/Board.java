@@ -1,4 +1,3 @@
-//TO DO NEXT: make boardtest
 package org.openjfx;
 
 public class Board 
