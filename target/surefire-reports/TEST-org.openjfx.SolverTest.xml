@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="org.openjfx.SolverTest" time="0.06" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="org.openjfx.SolverTest" time="0.074" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -15,9 +15,9 @@
     <property name="user.country" value="US"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Eclipse Adoptium\jdk-17.0.14.7-hotspot\bin"/>
-    <property name="sun.java.command" value="org.apache.maven.surefire.booter.ForkedBooter C:\Users\jasmi\AppData\Local\Temp\surefire8013061021410460367 2025-06-18T14-37-28_641-jvmRun1 surefire-20250618143729121_1tmp surefire_0-20250618143729121_2tmp"/>
+    <property name="sun.java.command" value="org.apache.maven.surefire.booter.ForkedBooter C:\Users\jasmi\AppData\Local\Temp\surefire11800909426457170436 2025-06-20T12-25-11_647-jvmRun1 surefire-20250620122512011_1tmp surefire_0-20250620122512011_2tmp"/>
     <property name="jdk.debug" value="release"/>
-    <property name="test" value="org.openjfx.SolverTest#testValidRow"/>
+    <property name="test" value="org.openjfx.SolverTest#testValidBoard"/>
     <property name="surefire.test.class.path" value="C:\Users\jasmi\Coding Projects\Sudoku-Solver\target\test-classes;C:\Users\jasmi\.m2\repository\org\openjfx\javafx-controls\21.0.7\javafx-controls-21.0.7.jar;C:\Users\jasmi\.m2\repository\org\openjfx\javafx-graphics\21.0.7\javafx-graphics-21.0.7.jar;C:\Users\jasmi\.m2\repository\org\openjfx\javafx-base\21.0.7\javafx-base-21.0.7.jar;C:\Users\jasmi\.m2\repository\org\junit\jupiter\junit-jupiter\5.10.2\junit-jupiter-5.10.2.jar;C:\Users\jasmi\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.2\junit-jupiter-api-5.10.2.jar;C:\Users\jasmi\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\jasmi\.m2\repository\org\junit\platform\junit-platform-commons\1.10.2\junit-platform-commons-1.10.2.jar;C:\Users\jasmi\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\jasmi\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.2\junit-jupiter-params-5.10.2.jar;C:\Users\jasmi\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.2\junit-jupiter-engine-5.10.2.jar;C:\Users\jasmi\.m2\repository\org\junit\platform\junit-platform-engine\1.10.2\junit-platform-engine-1.10.2.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
     <property name="user.home" value="C:\Users\jasmi"/>
@@ -61,5 +61,5 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="61.0"/>
   </properties>
-  <testcase name="testValidRow" classname="org.openjfx.SolverTest" time="0.029"/>
+  <testcase name="testValidBoard" classname="org.openjfx.SolverTest" time="0.029"/>
 </testsuite>

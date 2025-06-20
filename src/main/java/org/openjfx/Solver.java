@@ -4,7 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Solver {
-    private Set<Integer> checker;
+    private final Set<Integer> checker; // Set of numbers 1-9
+    // This set is used to check if a number is already present in the row, column, or box.
 
     public Solver()
     {
@@ -16,7 +17,7 @@ public class Solver {
 
     public boolean validRow(Board b, int r)
     {
-        Set<Integer> n = new HashSet<Integer>(checker);
+        Set<Integer> n = new HashSet<>(checker);
         for(int c = 0; c<9; c++)
         {
             Integer i = b.get(c,r);
@@ -37,7 +38,7 @@ public class Solver {
 
     public boolean validColumn(Board b, int c)
     {
-        Set<Integer> n = new HashSet<Integer>(checker);
+        Set<Integer> n = new HashSet<>(checker);
         for(int r = 0; r<9; r++)
         {
             Integer i = b.get(c,r);
@@ -56,11 +57,92 @@ public class Solver {
         return true;
     }
 
-    public boolean validBox()
+    public boolean validBox(Board b, int boxC, int boxR)
     {
-        // This method is not implemented yet.
-        // It should check if a 3x3 box in the Sudoku board is valid.
-        return true; // Placeholder return value
+        Set<Integer> n = new HashSet<>(checker);
+        for(int r=0; r < 3; r++)
+        {
+            for(int c=0; c < 3; c++)
+            {
+                Integer i = b.get(boxC + c,boxR + r);
+                if(i!=null)
+                {
+                    if(!n.contains(i))
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        n.remove(i);
+                    }
+                }  
+            }
+        }
+        return true;
+    }
+
+    public boolean validAllRows(Board b)
+    {
+        for(int r = 0; r<9; r++)
+        {
+            if(!validRow(b,r))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean validAllColumns(Board b)
+    {
+        for(int c = 0; c<9; c++)
+        {
+            if(!validColumn(b,c))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean validAllBoxes(Board b)
+    {
+        for(int r = 0; r < 3; r++)
+        {
+            for(int c = 0; c < 3; c++)
+            {
+                if(!validBox(b,c*3,r*3))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean validBoard(Board b)
+    {
+        return validAllRows(b) && validAllColumns(b) && validAllBoxes(b);
+    }
+
+    public boolean complete(Board b) //Checks if the board is completely filled
+    {
+        for(int r = 0; r<9; r++)
+        {
+            for(int c = 0; c<9; c++)
+            {
+                if(b.get(c,r) == null)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean completeAndValid(Board b)
+    {
+        return complete(b) && validBoard(b);
     }
 
 }
