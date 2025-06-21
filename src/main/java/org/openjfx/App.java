@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -23,10 +24,35 @@ public class App extends Application {
 
     TextField[][] textFields = new TextField[9][9];
 
-    public void clearTextField(TextField t)
+    public void styleTextField(int c, int r, boolean clear)
     {
+        //When clear is true, it will set the text field to white (default)
+        //When clear is false, it will set the text field to a light green color (solved)
+        TextField t = textFields[c][r];
+        String style = "-fx-background-radius:0; ";
+
+        if(clear)
+        {
+            style +=
+            "-fx-background-color:rgb(255, 255, 255); " +
+            "-fx-border-color: rgb(180, 165, 180);";
+        }
+        else
+        {
+            style +=
+            "-fx-background-color:rgb(100, 200, 100); " +
+            "-fx-border-color: rgb(50, 100, 50);";
+        }
+
+        style += "-fx-border-width:";
+        
+        if (r % 3 == 0) {style += " 2";} else {style += " 0.5";}
+        if (c == 8) {style += " 2";} else {style += " 0.5";}
+        if (r == 8) {style += " 2";} else {style += " 0.5";}
+        if (c % 3 == 0) {style += " 2";} else {style += " 0.5";}
+
         t.setText("");
-        t.setStyle("-fx-background-color:rgb(255, 255, 255); -fx-background-radius:0; -fx-border-width: 1; -fx-border-color: rgb(180, 165, 180);");
+        t.setStyle(style);
     }
 
     @Override
@@ -39,9 +65,7 @@ public class App extends Application {
         //9x9 Grid
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
-        grid.setHgap(5);
-        grid.setVgap(5);
-        grid.setPadding(new Insets(25,45,25,45));
+        grid.setPadding(new Insets(10,40,10,40));
 
         //Inserting text fields into the grid
         for(int r = 0; r<9; r++)
@@ -50,8 +74,8 @@ public class App extends Application {
             {
                 TextField t = new TextField();
                 t.setAlignment(Pos.CENTER);
-                textFields[c][r] = t; //not [r][c]  because columns represent x axis, rows are y-axis
-                clearTextField(textFields[c][r]);
+                textFields[c][r] = t; //columns represent x axis, rows are y-axis
+                styleTextField(c, r, true);
                 grid.add(t,c,r);
             }
         }
@@ -59,11 +83,9 @@ public class App extends Application {
         //Sudoku Text Label
         Label textLabel = new Label("Sudoku Solver");
         textLabel.setFont(headerFont);
-        HBox titleBox = new HBox(10);
+        HBox titleBox = new HBox();
         titleBox.getChildren().add(textLabel);
-        titleBox.setAlignment(Pos.BOTTOM_LEFT);
-        titleBox.setPadding(new Insets(10,0,0,0));
-        grid.add(titleBox,0,9,9,1);
+        titleBox.setAlignment(Pos.CENTER);
 
         //Clear Button
         Button clearBtn = new Button("Clear");
@@ -74,7 +96,7 @@ public class App extends Application {
             {
                 for(int c = 0; c<9; c++)
                 {
-                    clearTextField(textFields[c][r]);
+                    styleTextField(c, r, true);
                 } 
             }
         });
@@ -90,7 +112,7 @@ public class App extends Application {
                 {
                     //testing, temp values, will add functionality later :3
                     textFields[c][r].setText("");
-                    textFields[c][r].setStyle("-fx-background-color:rgb(150, 235, 100); -fx-background-radius:0; -fx-border-width: 1; -fx-border-color: rgb(50, 140, 50);");
+                    styleTextField(c, r, false);
                 }
             }
         });
@@ -98,11 +120,15 @@ public class App extends Application {
         //Adding buttons to the grid
         HBox buttonBox = new HBox(10);
         buttonBox.getChildren().addAll(clearBtn, solveBtn);
-        buttonBox.setAlignment(Pos.BOTTOM_LEFT);
-        grid.add(buttonBox,0,10,9,1);
+        buttonBox.setAlignment(Pos.CENTER);
         
         //Setting up the stage
-        var scene = new Scene(grid,400,500);
+        VBox vbox = new VBox();
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setPadding(new Insets(25,25,25,25));
+        vbox.getChildren().addAll(titleBox, grid, buttonBox);
+
+        var scene = new Scene(vbox,400,500);
         stage.setScene(scene);
         stage.setResizable(false);
         stage.setTitle("Sudoku Solver");
