@@ -24,6 +24,10 @@ public class App extends Application {
 
     TextField[][] textFields = new TextField[9][9];
 
+    //Fonts & Customization
+    Font textFont = Font.font("Helvetica");
+    Font headerFont = Font.font("Helvetica", FontWeight.BOLD, 16);
+
     public void styleTextField(int c, int r, boolean clear)
     {
         //When clear is true, it will set the text field to white (default)
@@ -35,7 +39,7 @@ public class App extends Application {
         {
             style +=
             "-fx-background-color:rgb(255, 255, 255); " +
-            "-fx-border-color: rgb(180, 165, 180);";
+            "-fx-border-color: rgb(135, 125, 135);";
         }
         else
         {
@@ -52,15 +56,12 @@ public class App extends Application {
         if (c % 3 == 0) {style += " 2";} else {style += " 0.5";}
 
         t.setText("");
+        t.setFont(textFont);
         t.setStyle(style);
     }
 
     @Override
     public void start(Stage stage) {
-
-        //Fonts & Customization
-        Font textFont = Font.font("Helvetica");
-        Font headerFont = Font.font("Helvetica", FontWeight.BOLD, 16);
 
         //9x9 Grid
         GridPane grid = new GridPane();

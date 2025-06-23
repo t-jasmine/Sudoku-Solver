@@ -145,4 +145,39 @@ public class Solver {
         return complete(b) && validBoard(b);
     }
 
+    Board solve(Board b)
+    {
+        if (!validBoard(b))
+        {
+            return null;
+        }
+        if (completeAndValid(b))
+        {
+            return b;
+        }
+
+        Board copy = new Board(b);
+        for (int r = 0; r < 9; r++)
+        {
+            for (int c = 0; c<9; c++)
+            {
+                Integer i = copy.get(c,r);
+                if(i == null)
+                {
+                    Set<Integer> n = new HashSet<>(checker);
+                    //Trying potential numbers 1-9
+                    for (Integer num : n)
+                    {
+                        copy.set(c,r,num);
+                        Board solution = solve(copy);
+                        if (solution!=null) {
+                            return solution; // Return found solution
+                        }
+                    }
+                    return null; // No solution found
+                }
+            }
+        }
+        return null;    
+    }
 }
