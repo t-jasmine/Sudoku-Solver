@@ -156,18 +156,19 @@ public class Solver {
             return b;
         }
 
-        Board copy = new Board(b);
+        //Board copy = new Board(b);
         for (int r = 0; r < 9; r++)
         {
             for (int c = 0; c<9; c++)
             {
-                Integer i = copy.get(c,r);
+                Integer i = b.get(c,r);
                 if(i == null)
                 {
                     Set<Integer> n = new HashSet<>(checker);
                     //Trying potential numbers 1-9
                     for (Integer num : n)
                     {
+                        Board copy = new Board(b);
                         copy.set(c,r,num);
                         Board solution = solve(copy);
                         if (solution!=null) {
