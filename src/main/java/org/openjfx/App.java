@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -80,10 +81,28 @@ public class App extends Application {
             for(int c = 0; c<9; c++)
             {
                 TextField t = new TextField();
+
+                //Setting text field properties
                 t.setAlignment(Pos.CENTER);
                 textFields[c][r] = t; //columns represent x axis, rows are y-axis
                 styleTextField(c, r, "white");
                 t.setFont(textFont);
+                
+                //Limiting character input
+                t.setTextFormatter(new TextFormatter<String>(change ->
+                {
+                    String newText = change.getControlNewText();
+                    if(!newText.matches("[1-9]*"))
+                    {
+                        change.setText("");
+                    }
+                    if(newText.length()>1)
+                    {
+                        return null;
+                    }   
+                    return change;
+                }));
+
                 grid.add(t,c,r);
             }
         }
