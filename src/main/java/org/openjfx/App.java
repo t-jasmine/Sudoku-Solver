@@ -67,6 +67,18 @@ public class App extends Application {
         t.setStyle(style);
     }
 
+    public void clearBoard()
+    {
+        for(int r = 0; r<9; r++)
+        {
+            for(int c = 0; c<9; c++)
+            {   
+                styleTextField(c, r, "white");
+                textFields[c][r].setText("");
+            } 
+        }
+    }
+
     @Override
     public void start(Stage stage) {
 
@@ -94,14 +106,51 @@ public class App extends Application {
                     String newText = change.getControlNewText();
                     if(!newText.matches("[1-9]*"))
                     {
-                        change.setText("");
+                        return null;
                     }
                     if(newText.length()>1)
                     {
+                        //If another number is entered, only keep the last one
+                        String lastChar = change.getText();
+                        if (!lastChar.isEmpty() && lastChar.matches("[1-9]*"))
+                        {
+                            change.setRange(0, change.getControlText().length()); //get range of text to replace
+                            change.setText(lastChar.substring(lastChar.length() - 1)); //set new text to last digit
+                            return change;
+                        }
                         return null;
                     }   
                     return change;
                 }));
+
+                //When arrow keys are pressed, focus on the next text field
+                
+                //final variables for lambda expression, cuz lambda expressions cant access local variables directly :3
+                final int row = r;
+                final int col = c;
+                t.setOnKeyPressed(event -> {
+                    if(event.getCode().isArrowKey())
+                    {
+                        switch(event.getCode())
+                        {
+                            case UP:
+                                if (row > 0) textFields[col][row-1].requestFocus();
+                                break;
+                            case DOWN:
+                                if (row<8) textFields[col][row+1].requestFocus();
+                                break;
+                            case LEFT:
+                                if (col > 0) textFields[col-1][row].requestFocus();
+                                break;
+                            case RIGHT:
+                                if (col < 8) textFields[col+1][row].requestFocus();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
+                
 
                 grid.add(t,c,r);
             }
@@ -119,14 +168,7 @@ public class App extends Application {
         clearBtn.setFont(textFont);
 
         clearBtn.setOnAction((ActionEvent event) -> {
-            for(int r = 0; r<9; r++)
-            {
-                for(int c = 0; c<9; c++)
-                {
-                    styleTextField(c, r, "white");
-                    textFields[c][r].setText("");
-                } 
-            }
+            clearBoard();
         });
 
         //Solve Button
@@ -157,14 +199,11 @@ public class App extends Application {
             for(int r = 0; r<9; r++)
             {
                 for(int c = 0; c<9; c++)
-                {                      
-                    if(textFields[c][r].getText().trim().equals(""))
-                    {
-                        if(solution==null)
-                        {
-                            styleTextField(c, r, "red");
-                        }
-                        else
+                {               
+                    styleTextField(c,r,"white");
+                    if(solution!= null)
+                    {     
+                        if(textFields[c][r].getText().trim().equals(""))
                         {
                             styleTextField(c, r, "green");
                             textFields[c][r].setText(""+solution.get(c,r));
@@ -172,7 +211,7 @@ public class App extends Application {
                     }
                     else
                     {
-                        styleTextField(c,r,"white");
+                        styleTextField(c, r, "red");
                     }
                 }
             }
@@ -195,6 +234,7 @@ public class App extends Application {
         stage.setTitle("Sudoku Solver");
         stage.show();
     }
+
 
     public static void main(String[] args) {
         launch();
