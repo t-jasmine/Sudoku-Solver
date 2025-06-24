@@ -2,7 +2,7 @@ package org.openjfx;
 
 public class Board 
 {
-    private Integer[][] board = new Integer[9][9];
+    private final Integer[][] board = new Integer[9][9];
 
     public Board()
     {
