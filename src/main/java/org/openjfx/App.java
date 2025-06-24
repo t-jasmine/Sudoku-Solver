@@ -28,24 +28,31 @@ public class App extends Application {
     Font textFont = Font.font("Helvetica");
     Font headerFont = Font.font("Helvetica", FontWeight.BOLD, 16);
 
-    public void styleTextField(int c, int r, boolean clear)
+    public void styleTextField(int c, int r, String color)
     {
-        //When clear is true, it will set the text field to white (default)
-        //When clear is false, it will set the text field to a light green color (solved)
+        //colors include white, green, & red
         TextField t = textFields[c][r];
         String style = "-fx-background-radius:0; ";
 
-        if(clear)
-        {
-            style +=
-            "-fx-background-color:rgb(255, 255, 255); " +
-            "-fx-border-color: rgb(135, 125, 135);";
-        }
-        else
-        {
-            style +=
-            "-fx-background-color:rgb(100, 200, 100); " +
-            "-fx-border-color: rgb(50, 100, 50);";
+        switch(color) {
+            case "white":
+                style +=
+                "-fx-background-color:rgb(255, 255, 255); " +
+                "-fx-border-color: rgb(135, 125, 135);";
+                break;
+            case "green":
+                style +=
+                "-fx-background-color:rgb(100, 200, 100); " +
+                "-fx-border-color: rgb(50, 100, 50);";
+                break;
+            case "red":
+                style +=
+                "-fx-background-color:rgb(225, 95, 95); " +
+                "-fx-border-color: rgb(115, 25, 25);";
+                break;
+            default:
+                break;
+                //something
         }
 
         style += "-fx-border-width:";
@@ -55,7 +62,6 @@ public class App extends Application {
         if (r == 8) {style += " 2";} else {style += " 0.5";}
         if (c % 3 == 0) {style += " 2";} else {style += " 0.5";}
 
-        t.setText("");
         t.setFont(textFont);
         t.setStyle(style);
     }
@@ -76,7 +82,8 @@ public class App extends Application {
                 TextField t = new TextField();
                 t.setAlignment(Pos.CENTER);
                 textFields[c][r] = t; //columns represent x axis, rows are y-axis
-                styleTextField(c, r, true);
+                styleTextField(c, r, "white");
+                t.setFont(textFont);
                 grid.add(t,c,r);
             }
         }
@@ -97,7 +104,8 @@ public class App extends Application {
             {
                 for(int c = 0; c<9; c++)
                 {
-                    styleTextField(c, r, true);
+                    styleTextField(c, r, "white");
+                    textFields[c][r].setText("");
                 } 
             }
         });
@@ -107,13 +115,46 @@ public class App extends Application {
         solveBtn.setFont(textFont);
 
         solveBtn.setOnAction((ActionEvent event) -> {
+            Solver s = new Solver();
+            Board b = new Board();
+
+            //Reading the text fields and setting the board
             for(int r = 0; r<9; r++)
             {
                 for(int c = 0; c<9; c++)
                 {
-                    //testing, temp values, will add functionality later :3
-                    textFields[c][r].setText("");
-                    styleTextField(c, r, false);
+                    try
+                    {
+                        Integer i = Integer.valueOf(textFields[c][r].getText().trim());
+                        b.set(c,r,i);
+                    } catch (NumberFormatException e) {}
+                }
+            }
+
+            Board solution = s.solve(b);
+
+            //Updating board with the solution
+
+            for(int r = 0; r<9; r++)
+            {
+                for(int c = 0; c<9; c++)
+                {                      
+                    if(textFields[c][r].getText().trim().equals(""))
+                    {
+                        if(solution==null)
+                        {
+                            styleTextField(c, r, "red");
+                        }
+                        else
+                        {
+                            styleTextField(c, r, "green");
+                            textFields[c][r].setText(""+solution.get(c,r));
+                        }
+                    }
+                    else
+                    {
+                        styleTextField(c,r,"white");
+                    }
                 }
             }
         });
