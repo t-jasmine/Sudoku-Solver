@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -43,7 +44,7 @@ public class App extends Application {
                 break;
             case "green":
                 style +=
-                "-fx-background-color:rgb(100, 200, 100); " +
+                "-fx-background-color:rgb(150, 250, 150); " +
                 "-fx-border-color: rgb(50, 100, 50);";
                 break;
             case "red":
@@ -232,6 +233,7 @@ public class App extends Application {
         stage.setScene(scene);
         stage.setResizable(false);
         stage.setTitle("Sudoku Solver");
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/Sudoku.jpg")));
         stage.show();
     }
 
