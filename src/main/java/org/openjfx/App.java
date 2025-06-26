@@ -23,8 +23,13 @@ import javafx.stage.Stage;
  */
 public class App extends Application {
     
-
+    //Variables
     TextField[][] textFields = new TextField[9][9];
+    Solver s = new Solver();
+    Board boardInput;
+    Board solution;
+    int selectedRow = -1;
+    int selectedCol = -1;
 
     //Fonts & Customization
     Font textFont = Font.font("Helvetica");
@@ -41,6 +46,11 @@ public class App extends Application {
                 style +=
                 "-fx-background-color:rgb(255, 255, 255); " +
                 "-fx-border-color: rgb(135, 125, 135);";
+                break;
+            case "grey":
+                style +=
+                "-fx-background-color:rgb(200, 200, 200); " +
+                "-fx-border-color: rgb(115, 100, 115);";
                 break;
             case "green":
                 style +=
@@ -78,6 +88,32 @@ public class App extends Application {
                 textFields[c][r].setText("");
             } 
         }
+        solution = null; //Reset the solution
+    }
+
+    public void setSolution()
+    {
+        boardInput = getBoardFromTextFields();
+        solution = s.solve(boardInput);
+    }
+
+    public Board getBoardFromTextFields()
+    {
+        Board b = new Board();
+
+        //Reading the text fields and setting the board
+        for(int r = 0; r<9; r++)
+        {
+            for(int c = 0; c<9; c++)
+            {
+                try
+                {
+                    Integer i = Integer.valueOf(textFields[c][r].getText().trim());
+                    b.set(c,r,i);
+                } catch (NumberFormatException e) {}
+            }
+        }
+        return b;
     }
 
     @Override
@@ -152,6 +188,18 @@ public class App extends Application {
                     }
                 });
                 
+                //When a text field is clicked, set it as the selected cell
+                t.focusedProperty().addListener((observable, oldVal, newVal) -> {
+                    if (newVal) {
+                        selectedRow = row;
+                        selectedCol = col;
+                        //Style the selected cell
+                        styleTextField(selectedCol, selectedRow, "grey");
+                    } else {
+                        //Reset the style when focus is lost
+                        styleTextField(col, row, "white");
+                    }
+                });
 
                 grid.add(t,c,r);
             }
@@ -172,28 +220,40 @@ public class App extends Application {
             clearBoard();
         });
 
+        //Solve Cell Button
+        Button solveCellBtn = new Button("Solve Cell");
+        solveCellBtn.setFont(textFont);
+
+        solveCellBtn.setOnAction((ActionEvent event) ->
+        {
+            setSolution();
+
+            //Updating the selected cell with the solution
+            if (selectedRow >= 0 && selectedCol >= 0 && solution != null)
+            { 
+                styleTextField(selectedCol, selectedRow, "green");
+                textFields[selectedCol][selectedRow].setText(""+solution.get(selectedCol,selectedRow));  
+            } 
+            else if(solution == null)
+            {
+                //No solution available;
+                styleTextField(selectedCol, selectedRow, "red");
+            }
+            else 
+            {
+                //No cell selected
+                //System.out.println("Please select a cell to solve.");
+            }
+            
+
+        });
+
         //Solve Button
         Button solveBtn = new Button("Solve");
         solveBtn.setFont(textFont);
 
         solveBtn.setOnAction((ActionEvent event) -> {
-            Solver s = new Solver();
-            Board b = new Board();
-
-            //Reading the text fields and setting the board
-            for(int r = 0; r<9; r++)
-            {
-                for(int c = 0; c<9; c++)
-                {
-                    try
-                    {
-                        Integer i = Integer.valueOf(textFields[c][r].getText().trim());
-                        b.set(c,r,i);
-                    } catch (NumberFormatException e) {}
-                }
-            }
-
-            Board solution = s.solve(b);
+            setSolution();
 
             //Updating board with the solution
 
@@ -220,7 +280,7 @@ public class App extends Application {
 
         //Adding buttons to the grid
         HBox buttonBox = new HBox(10);
-        buttonBox.getChildren().addAll(clearBtn, solveBtn);
+        buttonBox.getChildren().addAll(clearBtn, solveCellBtn, solveBtn);
         buttonBox.setAlignment(Pos.CENTER);
         
         //Setting up the stage
