@@ -7,7 +7,6 @@ public class Board
     public Board()
     {
         //Initializing the board with null values
-
     }
 
     public Board(Board b) //Makes a copy of Board b

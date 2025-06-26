@@ -156,7 +156,6 @@ public class Solver {
             return b;
         }
 
-        //Board copy = new Board(b);
         for (int r = 0; r < 9; r++)
         {
             for (int c = 0; c<9; c++)

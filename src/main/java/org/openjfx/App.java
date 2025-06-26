@@ -31,7 +31,7 @@ public class App extends Application {
     int selectedRow = -1;
     int selectedCol = -1;
 
-    //Fonts & Customization
+    //Fonts
     Font textFont = Font.font("Helvetica");
     Font headerFont = Font.font("Helvetica", FontWeight.BOLD, 16);
 
@@ -64,7 +64,6 @@ public class App extends Application {
                 break;
             default:
                 break;
-                //something
         }
 
         style += "-fx-border-width:";
@@ -116,9 +115,8 @@ public class App extends Application {
         return b;
     }
 
-    @Override
-    public void start(Stage stage) {
-
+    public GridPane createGrid()
+    {
         //9x9 Grid
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -136,31 +134,34 @@ public class App extends Application {
                 textFields[c][r] = t; //columns represent x axis, rows are y-axis
                 styleTextField(c, r, "white");
                 t.setFont(textFont);
-                
+
                 //Limiting character input
                 t.setTextFormatter(new TextFormatter<String>(change ->
                 {
+                    
                     String newText = change.getControlNewText();
-                    if(!newText.matches("[1-9]*"))
+
+                    if(newText.matches("[1-9]?"))
                     {
-                        return null;
+                        return change;
                     }
-                    if(newText.length()>1)
-                    {
+                    if (newText.length()>1) {
+
                         //If another number is entered, only keep the last one
-                        String lastChar = change.getText();
-                        if (!lastChar.isEmpty() && lastChar.matches("[1-9]*"))
-                        {
+                        String lastChar = newText.replaceAll("[^1-9]","");
+                        if (!lastChar.isEmpty()) { 
                             change.setRange(0, change.getControlText().length()); //get range of text to replace
                             change.setText(lastChar.substring(lastChar.length() - 1)); //set new text to last digit
                             return change;
                         }
                         return null;
-                    }   
-                    return change;
+                    }
+                    return null;
+                    
                 }));
 
-                //When arrow keys are pressed, focus on the next text field
+                //Arrow Key Navigation
+                //allows the user to navigate through the grid using arrow keys
                 
                 //final variables for lambda expression, cuz lambda expressions cant access local variables directly :3
                 final int row = r;
@@ -204,14 +205,11 @@ public class App extends Application {
                 grid.add(t,c,r);
             }
         }
+        return grid;
+    }
 
-        //Sudoku Text Label
-        Label textLabel = new Label("Sudoku Solver");
-        textLabel.setFont(headerFont);
-        HBox titleBox = new HBox();
-        titleBox.getChildren().add(textLabel);
-        titleBox.setAlignment(Pos.CENTER);
-
+    public HBox createButtonBox()
+    {
         //Clear Button
         Button clearBtn = new Button("Clear");
         clearBtn.setFont(textFont);
@@ -229,23 +227,24 @@ public class App extends Application {
             setSolution();
 
             //Updating the selected cell with the solution
-            if (selectedRow >= 0 && selectedCol >= 0 && solution != null)
-            { 
-                styleTextField(selectedCol, selectedRow, "green");
-                textFields[selectedCol][selectedRow].setText(""+solution.get(selectedCol,selectedRow));  
-            } 
-            else if(solution == null)
+            if (selectedRow >= 0 && selectedCol >= 0)
             {
-                //No solution available;
-                styleTextField(selectedCol, selectedRow, "red");
+                if(solution != null)
+                { 
+                    styleTextField(selectedCol, selectedRow, "green");
+                    textFields[selectedCol][selectedRow].setText(""+solution.get(selectedCol,selectedRow));  
+                } 
+                else
+                {
+                    //No solution available;
+                    styleTextField(selectedCol, selectedRow, "red");
+                }
             }
-            else 
+            else
             {
                 //No cell selected
-                //System.out.println("Please select a cell to solve.");
+                System.out.println("No cell selected");
             }
-            
-
         });
 
         //Solve Button
@@ -278,23 +277,44 @@ public class App extends Application {
             }
         });
 
-        //Adding buttons to the grid
+        //Adding buttons to the button box
         HBox buttonBox = new HBox(10);
         buttonBox.getChildren().addAll(clearBtn, solveCellBtn, solveBtn);
         buttonBox.setAlignment(Pos.CENTER);
-        
-        //Setting up the stage
-        VBox vbox = new VBox();
-        vbox.setAlignment(Pos.CENTER);
-        vbox.setPadding(new Insets(25,25,25,25));
-        vbox.getChildren().addAll(titleBox, grid, buttonBox);
 
+        return buttonBox;
+    }
+
+    public void setStage(Stage stage, VBox vbox)
+    {
         var scene = new Scene(vbox,400,500);
         stage.setScene(scene);
         stage.setResizable(false);
         stage.setTitle("Sudoku Solver");
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/Sudoku.jpg")));
         stage.show();
+    }
+
+    @Override
+    public void start(Stage stage) {
+
+        //Sudoku Header
+        Label textLabel = new Label("Sudoku Solver");
+        textLabel.setFont(headerFont);
+
+        HBox titleBox = new HBox();
+        titleBox.getChildren().add(textLabel);
+        titleBox.setAlignment(Pos.CENTER);
+        
+        GridPane grid = createGrid();
+        HBox buttonBox = createButtonBox();
+        VBox vbox = new VBox();
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setPadding(new Insets(25,25,25,25));
+        vbox.getChildren().addAll(titleBox, grid, buttonBox);
+
+        setStage(stage, vbox);
+        vbox.requestFocus(); //Removing initial focus from text fields
     }
 
 
