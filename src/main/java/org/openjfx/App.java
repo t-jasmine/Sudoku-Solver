@@ -35,7 +35,7 @@ public class App extends Application {
     Font textFont = Font.font("Helvetica");
     Font headerFont = Font.font("Helvetica", FontWeight.BOLD, 16);
 
-    public void styleTextField(int c, int r, String color)
+    private void styleTextField(int c, int r, String color)
     {
         //colors include white, green, & red
         TextField t = textFields[c][r];
@@ -77,7 +77,7 @@ public class App extends Application {
         t.setStyle(style);
     }
 
-    public void clearBoard()
+    private void clearBoard()
     {
         for(int r = 0; r<9; r++)
         {
@@ -90,13 +90,65 @@ public class App extends Application {
         solution = null; //Reset the solution
     }
 
-    public void setSolution()
+    private void setSolution()
     {
         boardInput = getBoardFromTextFields();
         solution = s.solve(boardInput);
     }
 
-    public Board getBoardFromTextFields()
+    private void solveSelectedCell()
+    {
+        setSolution();
+
+        //Updating the selected cell with the solution
+        if (selectedRow >= 0 && selectedCol >= 0)
+        {
+            if(solution != null)
+            { 
+                styleTextField(selectedCol, selectedRow, "green");
+                textFields[selectedCol][selectedRow].setText(""+solution.get(selectedCol,selectedRow));  
+            } 
+            else
+            {
+                //No solution available;
+                styleTextField(selectedCol, selectedRow, "red");
+            }
+        }
+        else
+        {
+            //No cell selected
+            System.out.println("No cell selected");
+        }
+    }
+
+    private void solveBoard()
+    {
+        setSolution();
+
+        //Updating board with the solution
+
+        for(int r = 0; r<9; r++)
+        {
+            for(int c = 0; c<9; c++)
+            {               
+                styleTextField(c,r,"white");
+                if(solution!= null)
+                {     
+                    if(textFields[c][r].getText().trim().equals(""))
+                    {
+                        styleTextField(c, r, "green");
+                        textFields[c][r].setText(""+solution.get(c,r));
+                    }
+                }
+                else
+                {
+                    styleTextField(c, r, "red");
+                }
+            }
+        }
+    }
+
+    private Board getBoardFromTextFields()
     {
         Board b = new Board();
 
@@ -115,7 +167,7 @@ public class App extends Application {
         return b;
     }
 
-    public GridPane createGrid()
+    private GridPane create9x9Grid()
     {
         //9x9 Grid
         GridPane grid = new GridPane();
@@ -208,7 +260,38 @@ public class App extends Application {
         return grid;
     }
 
-    public HBox createButtonBox()
+    private void initMiniSudoku(String toSolve) //toSolve = cell, board
+    {
+        Stage stage = new Stage();
+        
+        Button testBtn = new Button("Test");
+        testBtn.setOnAction((ActionEvent event) ->
+        {
+            stage.close();
+            if(toSolve.equals("cell"))
+            {
+                solveSelectedCell();
+            }
+            else
+            {
+                solveBoard();
+            }
+        });
+
+        VBox vbox = new VBox();
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setPadding(new Insets(25,25,25,25));
+        vbox.getChildren().addAll(testBtn);
+        var scene = new Scene(vbox,350,350);
+        stage.setScene(scene);
+        
+        stage.setResizable(false);
+        stage.setTitle("Mini Sudoku!");
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/Sudoku.jpg")));
+        stage.show();
+    }
+
+    private HBox createButtonBox()
     {
         //Clear Button
         Button clearBtn = new Button("Clear");
@@ -224,27 +307,7 @@ public class App extends Application {
 
         solveCellBtn.setOnAction((ActionEvent event) ->
         {
-            setSolution();
-
-            //Updating the selected cell with the solution
-            if (selectedRow >= 0 && selectedCol >= 0)
-            {
-                if(solution != null)
-                { 
-                    styleTextField(selectedCol, selectedRow, "green");
-                    textFields[selectedCol][selectedRow].setText(""+solution.get(selectedCol,selectedRow));  
-                } 
-                else
-                {
-                    //No solution available;
-                    styleTextField(selectedCol, selectedRow, "red");
-                }
-            }
-            else
-            {
-                //No cell selected
-                System.out.println("No cell selected");
-            }
+            initMiniSudoku("cell");
         });
 
         //Solve Button
@@ -252,29 +315,7 @@ public class App extends Application {
         solveBtn.setFont(textFont);
 
         solveBtn.setOnAction((ActionEvent event) -> {
-            setSolution();
-
-            //Updating board with the solution
-
-            for(int r = 0; r<9; r++)
-            {
-                for(int c = 0; c<9; c++)
-                {               
-                    styleTextField(c,r,"white");
-                    if(solution!= null)
-                    {     
-                        if(textFields[c][r].getText().trim().equals(""))
-                        {
-                            styleTextField(c, r, "green");
-                            textFields[c][r].setText(""+solution.get(c,r));
-                        }
-                    }
-                    else
-                    {
-                        styleTextField(c, r, "red");
-                    }
-                }
-            }
+            initMiniSudoku("board");
         });
 
         //Adding buttons to the button box
@@ -306,7 +347,7 @@ public class App extends Application {
         titleBox.getChildren().add(textLabel);
         titleBox.setAlignment(Pos.CENTER);
         
-        GridPane grid = createGrid();
+        GridPane grid = create9x9Grid();
         HBox buttonBox = createButtonBox();
         VBox vbox = new VBox();
         vbox.setAlignment(Pos.CENTER);
