@@ -1,6 +1,8 @@
 org\openjfx\App$1.class
-org\openjfx\Solver.class
 module-info.class
-org\openjfx\App.class
 org\openjfx\Board.class
+org\openjfx\MiniBoard.class
+org\openjfx\Solver.class
+org\openjfx\MiniSolver.class
+org\openjfx\App.class
 org\openjfx\SystemInfo.class

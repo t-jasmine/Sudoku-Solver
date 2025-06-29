@@ -1,5 +1,8 @@
 package org.openjfx;
 
+import org.openjfx.miniSudoku.MiniBoard;
+import org.openjfx.miniSudoku.MiniSolver;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
@@ -31,6 +34,11 @@ public class App extends Application {
     Board solution;
     int selectedRow = -1;
     int selectedCol = -1;
+
+    //test
+    MiniSolver miniSolver = new MiniSolver();
+    Board miniInput;
+    Board miniSolution;
 
     //Fonts
     Font textFont = Font.font("Helvetica");
@@ -112,6 +120,13 @@ public class App extends Application {
         solution = s.solve(boardInput);
     }
 
+    //test
+    private void setMiniSolution()
+    {
+        miniInput = getMiniFromTextFields();
+        miniSolution = miniSolver.solve(miniInput);
+    }
+
     private void solveSelectedCell()
     {
         setSolution();
@@ -176,6 +191,24 @@ public class App extends Application {
                 try
                 {
                     Integer i = Integer.valueOf(textFields[c][r].getText().trim());
+                    b.set(c,r,i);
+                } catch (NumberFormatException e) {}
+            }
+        }
+        return b;
+    }
+
+    private MiniBoard getMiniFromTextFields()
+    {
+        MiniBoard b = new MiniBoard();
+        //Reading the text fields and setting the board
+        for(int r = 0; r<4; r++)
+        {
+            for(int c = 0; c<4; c++)
+            {
+                try
+                {
+                    Integer i = Integer.valueOf(miniTextFields[c][r].getText().trim());
                     b.set(c,r,i);
                 } catch (NumberFormatException e) {}
             }
@@ -283,10 +316,13 @@ public class App extends Application {
     private void initMiniSudoku(String toSolve) //toSolve = cell, board
     {
         Stage stage = new Stage();
+
+        GridPane grid = createGrid(4);
         
         Button testBtn = new Button("Test");
         testBtn.setOnAction((ActionEvent event) ->
         {
+            /*
             stage.close();
             if(toSolve.equals("cell"))
             {
@@ -296,9 +332,28 @@ public class App extends Application {
             {
                 solveBoard();
             }
+            */
+            setMiniSolution();
+            for(int r = 0; r<4; r++)
+            {
+                for(int c = 0; c<4; c++)
+                {               
+                    styleTextField(c,r,"white", true);
+                    if(miniSolution!= null)
+                    {     
+                        if(miniTextFields[c][r].getText().trim().equals(""))
+                        {
+                            styleTextField(c, r, "green", true);
+                            miniTextFields[c][r].setText(""+miniSolution.get(c,r));
+                        }
+                    }
+                    else
+                    {
+                        styleTextField(c, r, "red", true);
+                    }
+                }
+            }   
         });
-
-        GridPane grid = createGrid(4);
 
         //Instruction Text
         Label textLabel = new Label("Solve this mini sudoku to get your solution!");

@@ -2,22 +2,34 @@ package org.openjfx;
 
 public class Board 
 {
-    private final Integer[][] board = new Integer[9][9];
+    protected final Integer[][] board;
 
-    public Board()
+    public Board() //Default 9x9 Grid
     {
-        //Initializing the board with null values
+        this(9);
+    }
+
+    public Board(int size)
+    {
+        board = new Integer[size][size];
     }
 
     public Board(Board b) //Makes a copy of Board b
     {
-        for(int r = 0; r<9; r++)
+        int size = b.board.length;
+        board = new Integer[size][size];
+        for(int r = 0; r<size; r++)
         {
-            for(int c = 0; c<9; c++)
+            for(int c = 0; c<size; c++)
             {
                 board[c][r] = b.get(c,r);
             }
         }
+    }
+
+    public Integer length()
+    {
+        return board.length;
     }
 
     public Integer get(int x, int y)
