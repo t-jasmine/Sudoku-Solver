@@ -35,32 +35,20 @@ public class App extends Application {
     int selectedRow = -1;
     int selectedCol = -1;
 
+    //Fonts
+    Font textFont = Font.font("Helvetica");
+    Font headerFont = Font.font("Helvetica", FontWeight.BOLD, 16);
+
     //test
     MiniSolver miniSolver = new MiniSolver();
     Board miniInput;
     Board miniSolution;
 
-    //Fonts
-    Font textFont = Font.font("Helvetica");
-    Font headerFont = Font.font("Helvetica", FontWeight.BOLD, 16);
-
-    private void styleTextField(int c, int r, String color, boolean mini)
+    private void styleTextField(TextField[][] fields, int c, int r, String color)
     {
-        TextField t;
-        int gridLength;
+        TextField t = fields[c][r];
         int boxesPerRow;
-        if(mini)
-        {
-            t = miniTextFields[c][r];
-            gridLength = 4;
-            boxesPerRow = 2;
-        }
-        else
-        {
-            t = textFields[c][r];
-            gridLength = 9;
-            boxesPerRow = 3;
-        }
+        if(fields.length==4) {boxesPerRow = 2;} else {boxesPerRow = 3;}
         
         String style = "-fx-background-radius:0; ";
 
@@ -93,13 +81,14 @@ public class App extends Application {
         style += "-fx-border-width:";
 
         if (r % boxesPerRow == 0) {style += " 2";} else {style += " 0.5";}
-        if (c == gridLength-1) {style += " 2";} else {style += " 0.5";}
-        if (r == gridLength-1) {style += " 2";} else {style += " 0.5";}
+        if (c == fields.length-1) {style += " 2";} else {style += " 0.5";}
+        if (r == fields.length-1) {style += " 2";} else {style += " 0.5";}
         if (c % boxesPerRow == 0) {style += " 2";} else {style += " 0.5";}
 
         t.setFont(textFont);
         t.setStyle(style);
     }
+
 
     private void clearBoard()
     {
@@ -107,7 +96,7 @@ public class App extends Application {
         {
             for(int c = 0; c<9; c++)
             {   
-                styleTextField(c, r, "white", false);
+                styleTextField(textFields,c, r, "white");
                 textFields[c][r].setText("");
             } 
         }
@@ -136,13 +125,13 @@ public class App extends Application {
         {
             if(solution != null)
             { 
-                styleTextField(selectedCol, selectedRow, "green", false);
+                styleTextField(textFields,selectedCol, selectedRow, "green");
                 textFields[selectedCol][selectedRow].setText(""+solution.get(selectedCol,selectedRow));  
             } 
             else
             {
                 //No solution available;
-                styleTextField(selectedCol, selectedRow, "red", false);
+                styleTextField(textFields,selectedCol, selectedRow, "red");
             }
         }
         else
@@ -162,18 +151,18 @@ public class App extends Application {
         {
             for(int c = 0; c<9; c++)
             {               
-                styleTextField(c,r,"white", false);
+                styleTextField(textFields,c,r,"white");
                 if(solution!= null)
                 {     
                     if(textFields[c][r].getText().trim().equals(""))
                     {
-                        styleTextField(c, r, "green", false);
+                        styleTextField(textFields,c, r, "green");
                         textFields[c][r].setText(""+solution.get(c,r));
                     }
                 }
                 else
                 {
-                    styleTextField(c, r, "red", false);
+                    styleTextField(textFields,c, r, "red");
                 }
             }
         }
@@ -232,7 +221,7 @@ public class App extends Application {
 
                 //Setting text field properties
                 t.setAlignment(Pos.CENTER);
-                styleTextField(c, r, "white", gridLength==4);
+                styleTextField(fields,c, r, "white");
                 t.setFont(textFont);
 
                 if (gridLength==4) { //4x4 Board Properties
@@ -293,17 +282,15 @@ public class App extends Application {
                 });
 
                 //When a text field is clicked, set it as the selected cell
-                final boolean mini;
-                mini = gridLength==4;
                 t.focusedProperty().addListener((observable, oldVal, newVal) -> {
                     if (newVal) {
                         selectedRow = row;
                         selectedCol = col;
                         //Style the selected cell
-                        styleTextField(selectedCol, selectedRow, "grey", mini);
+                        styleTextField(fields,selectedCol, selectedRow, "grey");
                     } else {
                         //Reset the style when focus is lost
-                        styleTextField(col, row, "white", mini);
+                        styleTextField(fields, col, row, "white");
                     }
                 });
 
@@ -338,18 +325,18 @@ public class App extends Application {
             {
                 for(int c = 0; c<4; c++)
                 {               
-                    styleTextField(c,r,"white", true);
+                    styleTextField(miniTextFields,c,r,"white");
                     if(miniSolution!= null)
                     {     
                         if(miniTextFields[c][r].getText().trim().equals(""))
                         {
-                            styleTextField(c, r, "green", true);
+                            styleTextField(miniTextFields,c, r, "green");
                             miniTextFields[c][r].setText(""+miniSolution.get(c,r));
                         }
                     }
                     else
                     {
-                        styleTextField(c, r, "red", true);
+                        styleTextField(miniTextFields,c, r, "red");
                     }
                 }
             }   
