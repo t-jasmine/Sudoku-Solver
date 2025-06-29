@@ -10,8 +10,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.image.Image;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -25,6 +27,7 @@ public class App extends Application {
     
     //Variables
     TextField[][] textFields = new TextField[9][9];
+    TextField[][] miniTextFields = new TextField[4][4];
     Solver s = new Solver();
     Board boardInput;
     Board solution;
@@ -35,12 +38,27 @@ public class App extends Application {
     Font textFont = Font.font("Helvetica");
     Font headerFont = Font.font("Helvetica", FontWeight.BOLD, 16);
 
-    private void styleTextField(int c, int r, String color)
+    private void styleTextField(int c, int r, String color, boolean mini)
     {
-        //colors include white, green, & red
-        TextField t = textFields[c][r];
+        TextField t;
+        int gridLength;
+        int boxesPerRow;
+        if(mini)
+        {
+            t = miniTextFields[c][r];
+            gridLength = 4;
+            boxesPerRow = 2;
+        }
+        else
+        {
+            t = textFields[c][r];
+            gridLength = 9;
+            boxesPerRow = 3;
+        }
+        
         String style = "-fx-background-radius:0; ";
 
+        //Styling color
         switch(color) {
             case "white":
                 style +=
@@ -67,11 +85,11 @@ public class App extends Application {
         }
 
         style += "-fx-border-width:";
-        
-        if (r % 3 == 0) {style += " 2";} else {style += " 0.5";}
-        if (c == 8) {style += " 2";} else {style += " 0.5";}
-        if (r == 8) {style += " 2";} else {style += " 0.5";}
-        if (c % 3 == 0) {style += " 2";} else {style += " 0.5";}
+
+        if (r % boxesPerRow == 0) {style += " 2";} else {style += " 0.5";}
+        if (c == gridLength-1) {style += " 2";} else {style += " 0.5";}
+        if (r == gridLength-1) {style += " 2";} else {style += " 0.5";}
+        if (c % boxesPerRow == 0) {style += " 2";} else {style += " 0.5";}
 
         t.setFont(textFont);
         t.setStyle(style);
@@ -83,7 +101,7 @@ public class App extends Application {
         {
             for(int c = 0; c<9; c++)
             {   
-                styleTextField(c, r, "white");
+                styleTextField(c, r, "white", false);
                 textFields[c][r].setText("");
             } 
         }
@@ -105,13 +123,13 @@ public class App extends Application {
         {
             if(solution != null)
             { 
-                styleTextField(selectedCol, selectedRow, "green");
+                styleTextField(selectedCol, selectedRow, "green", false);
                 textFields[selectedCol][selectedRow].setText(""+solution.get(selectedCol,selectedRow));  
             } 
             else
             {
                 //No solution available;
-                styleTextField(selectedCol, selectedRow, "red");
+                styleTextField(selectedCol, selectedRow, "red", false);
             }
         }
         else
@@ -131,18 +149,18 @@ public class App extends Application {
         {
             for(int c = 0; c<9; c++)
             {               
-                styleTextField(c,r,"white");
+                styleTextField(c,r,"white", false);
                 if(solution!= null)
                 {     
                     if(textFields[c][r].getText().trim().equals(""))
                     {
-                        styleTextField(c, r, "green");
+                        styleTextField(c, r, "green", false);
                         textFields[c][r].setText(""+solution.get(c,r));
                     }
                 }
                 else
                 {
-                    styleTextField(c, r, "red");
+                    styleTextField(c, r, "red", false);
                 }
             }
         }
@@ -180,17 +198,16 @@ public class App extends Application {
             for(int c = 0; c<9; c++)
             {
                 TextField t = new TextField();
+                textFields[c][r] = t; //columns represent x axis, rows are y-axis
 
                 //Setting text field properties
                 t.setAlignment(Pos.CENTER);
-                textFields[c][r] = t; //columns represent x axis, rows are y-axis
-                styleTextField(c, r, "white");
+                styleTextField(c, r, "white", false);
                 t.setFont(textFont);
 
                 //Limiting character input
                 t.setTextFormatter(new TextFormatter<String>(change ->
                 {
-                    
                     String newText = change.getControlNewText();
 
                     if(newText.matches("[1-9]?"))
@@ -198,7 +215,6 @@ public class App extends Application {
                         return change;
                     }
                     if (newText.length()>1) {
-
                         //If another number is entered, only keep the last one
                         String lastChar = newText.replaceAll("[^1-9]","");
                         if (!lastChar.isEmpty()) { 
@@ -209,7 +225,6 @@ public class App extends Application {
                         return null;
                     }
                     return null;
-                    
                 }));
 
                 //Arrow Key Navigation
@@ -247,16 +262,113 @@ public class App extends Application {
                         selectedRow = row;
                         selectedCol = col;
                         //Style the selected cell
-                        styleTextField(selectedCol, selectedRow, "grey");
+                        styleTextField(selectedCol, selectedRow, "grey", false);
                     } else {
                         //Reset the style when focus is lost
-                        styleTextField(col, row, "white");
+                        styleTextField(col, row, "white", false);
                     }
                 });
 
                 grid.add(t,c,r);
             }
         }
+        return grid;
+    }
+
+    private GridPane create4x4Grid()
+    {
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.setPrefSize(160,160);
+        grid.setPadding(new Insets(10,100,10,100));
+
+        int cellSize = 40;
+        for(int r = 0; r<4; r++)
+        {
+            for(int c = 0; c<4; c++)
+            {
+                TextField t = new TextField();
+                miniTextFields[c][r] = t;
+                t.setAlignment(Pos.CENTER);
+                t.setFont(textFont);
+                t.setPrefSize(cellSize, cellSize);
+                t.setMaxSize(cellSize, cellSize);
+                styleTextField(c,r,"white",true);
+
+                //Limiting character input
+                t.setTextFormatter(new TextFormatter<String>(change ->
+                {
+                    String newText = change.getControlNewText();
+
+                    if(newText.matches("[1-4]?"))
+                    {
+                        return change;
+                    }
+                    if (newText.length()>1) {
+                        //If another number is entered, only keep the last one
+                        String lastChar = newText.replaceAll("[^1-4]","");
+                        if (!lastChar.isEmpty()) { 
+                            change.setRange(0, change.getControlText().length()); //get range of text to replace
+                            change.setText(lastChar.substring(lastChar.length() - 1)); //set new text to last digit
+                            return change;
+                        }
+                        return null;
+                    }
+                    return null;
+                }));
+
+                final int row = r;
+                final int col = c;
+                t.setOnKeyPressed(event -> {
+                    if(event.getCode().isArrowKey())
+                    {
+                        switch(event.getCode())
+                        {
+                            case UP:
+                                if (row > 0) miniTextFields[col][row-1].requestFocus();
+                                break;
+                            case DOWN:
+                                if (row<3) miniTextFields[col][row+1].requestFocus();
+                                break;
+                            case LEFT:
+                                if (col > 0) miniTextFields[col-1][row].requestFocus();
+                                break;
+                            case RIGHT:
+                                if (col < 3) miniTextFields[col+1][row].requestFocus();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
+
+                //When a text field is clicked, set it as the selected cell
+                t.focusedProperty().addListener((observable, oldVal, newVal) -> {
+                    if (newVal) {
+                        selectedRow = row;
+                        selectedCol = col;
+                        //Style the selected cell
+                        styleTextField(selectedCol, selectedRow, "grey", true);
+                    } else {
+                        //Reset the style when focus is lost
+                        styleTextField(col, row, "white", true);
+                    }
+                });
+
+                grid.add(t,c,r);
+            }
+        }
+        
+        for(int i = 0; i<4; i++)
+        {
+            ColumnConstraints colConst = new ColumnConstraints();
+            colConst.setPercentWidth(25); //4 columns, 25% each width
+            grid.getColumnConstraints().add(colConst);
+
+            RowConstraints rowConst = new RowConstraints();
+            rowConst.setPercentHeight(25); //4 rows, 25% each height                grid.getRowConstraints().add(rowConst);
+        }
+        
         return grid;
     }
 
@@ -278,10 +390,12 @@ public class App extends Application {
             }
         });
 
+        GridPane grid = create4x4Grid();
+
         VBox vbox = new VBox();
         vbox.setAlignment(Pos.CENTER);
-        vbox.setPadding(new Insets(25,25,25,25));
-        vbox.getChildren().addAll(testBtn);
+        //vbox.setPadding(new Insets(10,10,10,10));
+        vbox.getChildren().addAll(grid,testBtn);
         var scene = new Scene(vbox,350,350);
         stage.setScene(scene);
         
@@ -307,7 +421,14 @@ public class App extends Application {
 
         solveCellBtn.setOnAction((ActionEvent event) ->
         {
-            initMiniSudoku("cell");
+            if (selectedRow>=0 && selectedCol>=0)
+            {
+                initMiniSudoku("cell");
+            }
+            else
+            {
+                System.out.println("No cell selected");
+            }
         });
 
         //Solve Button
