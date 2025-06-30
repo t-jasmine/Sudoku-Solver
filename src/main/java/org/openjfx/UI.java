@@ -189,12 +189,31 @@ public class UI {
         return grid;
     }
 
-    //Create Button Box
-
-    //Set Stage
-    
-
     //Mini Sudoku Window
+
+    public static void fillMiniBoard(TextField[][] fields) //fills cells in board & makes textfields uneditable
+    {
+        MiniBoard b = new MiniBoard();
+        b.generateBoard(10); //testing, random val
+
+        
+        for(int r = 0; r<fields.length; r++)
+        {
+            for(int c = 0; c<fields.length; c++)
+            {
+                if (b.get(c,r)!=null) {
+                    fields[c][r].setText(""+b.get(c,r));
+                    fields[c][r].setEditable(false);
+                }
+                else
+                {
+                    fields[c][r].setText("");
+                    fields[c][r].setEditable(true);
+                }
+            }
+        }
+    
+    }
 
 
 }

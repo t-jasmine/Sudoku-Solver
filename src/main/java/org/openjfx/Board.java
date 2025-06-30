@@ -42,4 +42,15 @@ public class Board
         board[x][y] = value;
     }
 
+    public void clear()
+    {
+        for (int r = 0; r<board.length; r++)
+        {
+            for(int c = 0; c<board.length; c++)
+            {
+                board[c][r] = null;
+            }
+        }
+    }
+
 }

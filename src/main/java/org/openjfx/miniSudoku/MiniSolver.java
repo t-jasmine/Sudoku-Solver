@@ -6,6 +6,7 @@ import java.util.Set;
 import org.openjfx.Board;
 import org.openjfx.Solver;
 
+//This class is used to check if the mini board is correct
 public class MiniSolver extends Solver {
     public MiniSolver()
     {

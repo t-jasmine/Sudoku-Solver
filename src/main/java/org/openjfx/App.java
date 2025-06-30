@@ -131,11 +131,13 @@ public class App extends Application {
         Stage stage = new Stage();
 
         GridPane grid = UI.createGrid(miniTextFields, 4, this::updateSelectedCell);
-        
+        UI.fillMiniBoard(miniTextFields);
+
         Button testBtn = new Button("Test");
         testBtn.setOnAction((ActionEvent event) ->
         {
 
+            /*
             stage.close();
             if(toSolve.equals("cell"))
             {
@@ -145,6 +147,7 @@ public class App extends Application {
             {
                 solveBoard();
             }
+            */
             
             
             setMiniSolution();
