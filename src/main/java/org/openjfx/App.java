@@ -10,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -130,104 +129,19 @@ public class App extends Application {
 
     //boardreterival methods
 
-    private GridPane createGrid(TextField[][] fields, int gridLength)
+    private void updateSelectedCell(int c, int r)
     {
-        GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
-
-        for(int r = 0; r<gridLength; r++)
-        {
-           for(int c = 0; c<gridLength; c++)
-            {
-                TextField t = new TextField();
-                fields[c][r] = t;
-
-                //Setting text field properties
-                t.setAlignment(Pos.CENTER);
-                UI.styleTextField(fields,c, r, "white");
-                t.setFont(textFont);
-
-                if (gridLength==4) { //4x4 Board Properties
-                    int cellSize = 30;
-                    t.setPrefSize(cellSize, cellSize);
-                    t.setMaxSize(cellSize, cellSize);
-                    grid.setPadding(new Insets(10,100,10,100));
-                }
-                else //9x9 Board Properties
-                {
-                    grid.setPadding(new Insets(10,40,10,40));
-                }
-
-                //Limiting character input
-                t.setTextFormatter(new TextFormatter<String>(change ->
-                {
-                    String newText = change.getControlNewText();
-                    if(newText.matches("[1-"+gridLength+"]?")) {return change;}
-                    if (newText.length()>1)
-                    {
-                        //If another number is entered, only keep the last one
-                        String lastChar = newText.replaceAll("[^1-"+gridLength+"]", "");
-                        if (!lastChar.isEmpty()) { 
-                            change.setRange(0, change.getControlText().length()); //get range of text to replace
-                            change.setText(lastChar.substring(lastChar.length() - 1)); //set new text to last digit
-                            return change;
-                        }
-                        return null;
-                    }
-                    return null;
-                }));
-
-                //Arrow Key Navigation
-                //Final Variables for Lambda Expression
-                final int row = r;
-                final int col = c;
-                t.setOnKeyPressed(event -> {
-                    if(event.getCode().isArrowKey())
-                    {
-                        switch(event.getCode())
-                        {
-                            case UP:
-                                if (row > 0) fields[col][row-1].requestFocus();
-                                break;
-                            case DOWN:
-                                if (row<gridLength-1) fields[col][row+1].requestFocus();
-                                break;
-                            case LEFT:
-                                if (col > 0) fields[col-1][row].requestFocus();
-                                break;
-                            case RIGHT:
-                                if (col < gridLength-1) fields[col+1][row].requestFocus();
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                });
-
-                //When a text field is clicked, set it as the selected cell
-                t.focusedProperty().addListener((observable, oldVal, newVal) -> {
-                    if (newVal) {
-                        selectedRow = row;
-                        selectedCol = col;
-                        //Style the selected cell
-                        UI.styleTextField(fields,selectedCol, selectedRow, "grey");
-                    } else {
-                        //Reset the style when focus is lost
-                        UI.styleTextField(fields, col, row, "white");
-                    }
-                });
-
-                grid.add(t,c,r);
-            }         
-        }
-        return grid;
+        selectedRow = r;
+        selectedCol = c;
     }
+
+//create gridpane
 
     private void initMiniSudoku(String toSolve) //toSolve = cell, board
     {
         Stage stage = new Stage();
 
-        GridPane grid = createGrid(miniTextFields, 4);
+        GridPane grid = UI.createGrid(miniTextFields, 4, this::updateSelectedCell);
         
         Button testBtn = new Button("Test");
         testBtn.setOnAction((ActionEvent event) ->
@@ -342,7 +256,7 @@ public class App extends Application {
         textLabel.setFont(headerFont);
         textLabel.setAlignment(Pos.CENTER);
         
-        GridPane grid = createGrid(textFields, 9);
+        GridPane grid = UI.createGrid(textFields, 9, this::updateSelectedCell);
         HBox buttonBox = createButtonBox();
         VBox vbox = new VBox();
         vbox.setAlignment(Pos.CENTER);
