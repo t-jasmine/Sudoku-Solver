@@ -14,8 +14,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 
@@ -37,17 +35,12 @@ public class App extends Application {
     int selectedRow = -1;
     int selectedCol = -1;
 
-    //Fonts
-    Font textFont = Font.font("Helvetica");
-    Font headerFont = Font.font("Helvetica", FontWeight.BOLD, 16);
-
     //test
     MiniSolver miniSolver = new MiniSolver();
     Board miniInput;
     Board miniSolution;
 
     //styletextfield
-
 
     private void clearBoard()
     {
@@ -127,15 +120,11 @@ public class App extends Application {
         }
     }
 
-    //boardreterival methods
-
     private void updateSelectedCell(int c, int r)
     {
         selectedRow = r;
         selectedCol = c;
     }
-
-//create gridpane
 
     private void initMiniSudoku(String toSolve) //toSolve = cell, board
     {
@@ -183,7 +172,7 @@ public class App extends Application {
 
         //Instruction Text
         Label textLabel = new Label("Solve this mini sudoku to get your solution!");
-        textLabel.setFont(textFont);
+        textLabel.setFont(UI.textFont);
         textLabel.setAlignment(Pos.CENTER);
 
         VBox vbox = new VBox();
@@ -202,7 +191,7 @@ public class App extends Application {
     {
         //Clear Button
         Button clearBtn = new Button("Clear");
-        clearBtn.setFont(textFont);
+        clearBtn.setFont(UI.textFont);
 
         clearBtn.setOnAction((ActionEvent event) -> {
             clearBoard();
@@ -210,7 +199,7 @@ public class App extends Application {
 
         //Solve Cell Button
         Button solveCellBtn = new Button("Solve Cell");
-        solveCellBtn.setFont(textFont);
+        solveCellBtn.setFont(UI.textFont);
 
         solveCellBtn.setOnAction((ActionEvent event) ->
         {
@@ -225,7 +214,7 @@ public class App extends Application {
 
         //Solve Button
         Button solveBtn = new Button("Solve");
-        solveBtn.setFont(textFont);
+        solveBtn.setFont(UI.textFont);
         solveBtn.setOnAction((ActionEvent event) -> {
             initMiniSudoku("board");
         });
@@ -238,22 +227,10 @@ public class App extends Application {
         return buttonBox;
     }
 
-    public void setStage(Stage stage, VBox vbox)
-    {
-        var scene = new Scene(vbox,400,500);
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.setTitle("Sudoku Solver");
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("/Sudoku.jpg")));
-        stage.show();
-    }
-
     @Override
     public void start(Stage stage) {
-
-        //Sudoku Header
         Label textLabel = new Label("Sudoku Solver");
-        textLabel.setFont(headerFont);
+        textLabel.setFont(UI.headerFont);
         textLabel.setAlignment(Pos.CENTER);
         
         GridPane grid = UI.createGrid(textFields, 9, this::updateSelectedCell);
@@ -263,8 +240,13 @@ public class App extends Application {
         vbox.setPadding(new Insets(25,25,25,25));
         vbox.getChildren().addAll(textLabel, grid, buttonBox);
 
-        setStage(stage, vbox);
-        vbox.requestFocus(); //Removing initial focus from text fields
+        var scene = new Scene(vbox,400,500);
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.setTitle("Sudoku Solver");
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/Sudoku.jpg")));
+        stage.show();
+        vbox.requestFocus();
     }
 
 

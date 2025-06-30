@@ -192,6 +192,7 @@ public class UI {
     //Create Button Box
 
     //Set Stage
+    
 
     //Mini Sudoku Window
 
