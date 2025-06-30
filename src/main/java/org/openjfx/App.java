@@ -205,12 +205,10 @@ public class App extends Application {
         return b;
     }
 
-    private GridPane createGrid(int gridLength)
+    private GridPane createGrid(TextField[][] fields, int gridLength)
     {
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
-        TextField[][] fields;
-        if(gridLength==4){fields = miniTextFields;}else{fields=textFields;}
 
         for(int r = 0; r<gridLength; r++)
         {
@@ -304,7 +302,7 @@ public class App extends Application {
     {
         Stage stage = new Stage();
 
-        GridPane grid = createGrid(4);
+        GridPane grid = createGrid(miniTextFields, 4);
         
         Button testBtn = new Button("Test");
         testBtn.setOnAction((ActionEvent event) ->
@@ -412,7 +410,7 @@ public class App extends Application {
         textLabel.setFont(headerFont);
         textLabel.setAlignment(Pos.CENTER);
         
-        GridPane grid = createGrid(9);
+        GridPane grid = createGrid(textFields, 9);
         HBox buttonBox = createButtonBox();
         VBox vbox = new VBox();
         vbox.setAlignment(Pos.CENTER);
