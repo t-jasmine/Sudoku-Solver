@@ -1,6 +1,5 @@
 package org.openjfx;
 
-import org.openjfx.miniSudoku.MiniBoard;
 import org.openjfx.miniSudoku.MiniSolver;
 
 import javafx.application.Application;
@@ -32,6 +31,10 @@ public class App extends Application {
     Solver s = new Solver();
     Board boardInput;
     Board solution;
+
+    //Row Selection
+    int mainSelectedRow = -1;
+    int mainSelectedCol = -1;
     int selectedRow = -1;
     int selectedCol = -1;
 
@@ -44,50 +47,7 @@ public class App extends Application {
     Board miniInput;
     Board miniSolution;
 
-    private void styleTextField(TextField[][] fields, int c, int r, String color)
-    {
-        TextField t = fields[c][r];
-        int boxesPerRow;
-        if(fields.length==4) {boxesPerRow = 2;} else {boxesPerRow = 3;}
-        
-        String style = "-fx-background-radius:0; ";
-
-        //Styling color
-        switch(color) {
-            case "white":
-                style +=
-                "-fx-background-color:rgb(255, 255, 255); " +
-                "-fx-border-color: rgb(135, 125, 135);";
-                break;
-            case "grey":
-                style +=
-                "-fx-background-color:rgb(200, 200, 200); " +
-                "-fx-border-color: rgb(115, 100, 115);";
-                break;
-            case "green":
-                style +=
-                "-fx-background-color:rgb(150, 250, 150); " +
-                "-fx-border-color: rgb(50, 100, 50);";
-                break;
-            case "red":
-                style +=
-                "-fx-background-color:rgb(225, 95, 95); " +
-                "-fx-border-color: rgb(115, 25, 25);";
-                break;
-            default:
-                break;
-        }
-
-        style += "-fx-border-width:";
-
-        if (r % boxesPerRow == 0) {style += " 2";} else {style += " 0.5";}
-        if (c == fields.length-1) {style += " 2";} else {style += " 0.5";}
-        if (r == fields.length-1) {style += " 2";} else {style += " 0.5";}
-        if (c % boxesPerRow == 0) {style += " 2";} else {style += " 0.5";}
-
-        t.setFont(textFont);
-        t.setStyle(style);
-    }
+    //styletextfield
 
 
     private void clearBoard()
@@ -96,7 +56,7 @@ public class App extends Application {
         {
             for(int c = 0; c<9; c++)
             {   
-                styleTextField(textFields,c, r, "white");
+                UI.styleTextField(textFields,c, r, "white");
                 textFields[c][r].setText("");
             } 
         }
@@ -105,14 +65,14 @@ public class App extends Application {
 
     private void setSolution()
     {
-        boardInput = getBoardFromTextFields();
+        boardInput = UI.getBoardFromTextFields(textFields);
         solution = s.solve(boardInput);
     }
 
     //test
     private void setMiniSolution()
     {
-        miniInput = getMiniFromTextFields();
+        miniInput = UI.getMiniFromTextFields(miniTextFields);
         miniSolution = miniSolver.solve(miniInput);
     }
 
@@ -121,17 +81,17 @@ public class App extends Application {
         setSolution();
 
         //Updating the selected cell with the solution
-        if (selectedRow >= 0 && selectedCol >= 0)
+        if (mainSelectedRow >= 0 && mainSelectedCol >= 0)
         {
             if(solution != null)
             { 
-                styleTextField(textFields,selectedCol, selectedRow, "green");
-                textFields[selectedCol][selectedRow].setText(""+solution.get(selectedCol,selectedRow));  
+                UI.styleTextField(textFields,mainSelectedCol, mainSelectedRow, "green");
+                textFields[mainSelectedCol][mainSelectedRow].setText(""+solution.get(mainSelectedCol,mainSelectedRow));  
             } 
             else
             {
                 //No solution available;
-                styleTextField(textFields,selectedCol, selectedRow, "red");
+                UI.styleTextField(textFields,mainSelectedCol, mainSelectedRow, "red");
             }
         }
         else
@@ -151,59 +111,24 @@ public class App extends Application {
         {
             for(int c = 0; c<9; c++)
             {               
-                styleTextField(textFields,c,r,"white");
+                UI.styleTextField(textFields,c,r,"white");
                 if(solution!= null)
                 {     
                     if(textFields[c][r].getText().trim().equals(""))
                     {
-                        styleTextField(textFields,c, r, "green");
+                        UI.styleTextField(textFields,c, r, "green");
                         textFields[c][r].setText(""+solution.get(c,r));
                     }
                 }
                 else
                 {
-                    styleTextField(textFields,c, r, "red");
+                    UI.styleTextField(textFields,c, r, "red");
                 }
             }
         }
     }
 
-    private Board getBoardFromTextFields()
-    {
-        Board b = new Board();
-
-        //Reading the text fields and setting the board
-        for(int r = 0; r<9; r++)
-        {
-            for(int c = 0; c<9; c++)
-            {
-                try
-                {
-                    Integer i = Integer.valueOf(textFields[c][r].getText().trim());
-                    b.set(c,r,i);
-                } catch (NumberFormatException e) {}
-            }
-        }
-        return b;
-    }
-
-    private MiniBoard getMiniFromTextFields()
-    {
-        MiniBoard b = new MiniBoard();
-        //Reading the text fields and setting the board
-        for(int r = 0; r<4; r++)
-        {
-            for(int c = 0; c<4; c++)
-            {
-                try
-                {
-                    Integer i = Integer.valueOf(miniTextFields[c][r].getText().trim());
-                    b.set(c,r,i);
-                } catch (NumberFormatException e) {}
-            }
-        }
-        return b;
-    }
+    //boardreterival methods
 
     private GridPane createGrid(TextField[][] fields, int gridLength)
     {
@@ -219,7 +144,7 @@ public class App extends Application {
 
                 //Setting text field properties
                 t.setAlignment(Pos.CENTER);
-                styleTextField(fields,c, r, "white");
+                UI.styleTextField(fields,c, r, "white");
                 t.setFont(textFont);
 
                 if (gridLength==4) { //4x4 Board Properties
@@ -285,10 +210,10 @@ public class App extends Application {
                         selectedRow = row;
                         selectedCol = col;
                         //Style the selected cell
-                        styleTextField(fields,selectedCol, selectedRow, "grey");
+                        UI.styleTextField(fields,selectedCol, selectedRow, "grey");
                     } else {
                         //Reset the style when focus is lost
-                        styleTextField(fields, col, row, "white");
+                        UI.styleTextField(fields, col, row, "white");
                     }
                 });
 
@@ -307,7 +232,7 @@ public class App extends Application {
         Button testBtn = new Button("Test");
         testBtn.setOnAction((ActionEvent event) ->
         {
-            /*
+
             stage.close();
             if(toSolve.equals("cell"))
             {
@@ -317,27 +242,29 @@ public class App extends Application {
             {
                 solveBoard();
             }
-            */
+            
+            
             setMiniSolution();
             for(int r = 0; r<4; r++)
             {
                 for(int c = 0; c<4; c++)
                 {               
-                    styleTextField(miniTextFields,c,r,"white");
+                    UI.styleTextField(miniTextFields,c,r,"white");
                     if(miniSolution!= null)
                     {     
                         if(miniTextFields[c][r].getText().trim().equals(""))
                         {
-                            styleTextField(miniTextFields,c, r, "green");
+                            UI.styleTextField(miniTextFields,c, r, "green");
                             miniTextFields[c][r].setText(""+miniSolution.get(c,r));
                         }
                     }
                     else
                     {
-                        styleTextField(miniTextFields,c, r, "red");
+                        UI.styleTextField(miniTextFields,c, r, "red");
                     }
                 }
-            }   
+            }
+            
         });
 
         //Instruction Text
@@ -373,7 +300,12 @@ public class App extends Application {
 
         solveCellBtn.setOnAction((ActionEvent event) ->
         {
-            if(selectedRow>=0 && selectedCol>=0) {initMiniSudoku("cell");}
+            if(selectedRow>=0 && selectedCol>=0)
+            {
+                mainSelectedRow = selectedRow;
+                mainSelectedCol = selectedCol;
+                initMiniSudoku("cell");
+            }
             //else{System.out.println("No cell selected");}
         });
 

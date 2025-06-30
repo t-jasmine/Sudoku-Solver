@@ -17,50 +17,6 @@ public class MiniSolver extends Solver {
         }
     }
 
-   /* 
-    public boolean validRow(MiniBoard b, int r)
-    {
-        Set<Integer> n = new HashSet<>(checker);
-        for(int c = 0; c<4; c++)
-        {
-            Integer i = b.get(c,r);
-            if(i!=null)
-            {
-                if(!n.contains(i))
-                {
-                    return false;
-                }
-                else
-                {
-                    n.remove(i);
-                }
-            }  
-        }
-        return true;
-    }
-
-    public boolean validColumn(MiniBoard b, int c)
-    {
-        Set<Integer> n = new HashSet<>(checker);
-        for(int r = 0; r<4; r++)
-        {
-            Integer i = b.get(c,r);
-            if(i!=null)
-            {
-                if(!n.contains(i))
-                {
-                    return false;
-                }
-                else
-                {
-                    n.remove(i);
-                }
-            }  
-        }
-        return true;
-    }
-    */
-
     @Override
     public boolean validBox(Board b, int boxC, int boxR)
     {
@@ -86,32 +42,6 @@ public class MiniSolver extends Solver {
         return true;
     }
 
-    /*
-    public boolean validAllRows(MiniBoard b)
-    {
-        for(int r = 0; r<4; r++)
-        {
-            if(!validRow(b,r))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean validAllColumns(MiniBoard b)
-    {
-        for(int c = 0; c<4; c++)
-        {
-            if(!validColumn(b,c))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-    */
-
     @Override
     public boolean validAllBoxes(Board b)
     {
@@ -128,36 +58,7 @@ public class MiniSolver extends Solver {
         return true;
     }
 
-    /*
-    public boolean validBoard(MiniBoard b)
-    {
-        return validAllRows(b) && validAllColumns(b) && validAllBoxes(b);
-    }
-
-    public boolean complete(MiniBoard b) //Checks if the board is completely filled
-    {
-        for(int r = 0; r<4; r++)
-        {
-            for(int c = 0; c<4; c++)
-            {
-                if(b.get(c,r) == null)
-                {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-    
-
-    public boolean completeAndValid(MiniBoard b)
-    {
-        return complete(b) && validBoard(b);
-    }
-    */
-
-    /*
-    MiniBoard solve(MiniBoard b)
+    public MiniBoard solve(MiniBoard b)
     {
         if (!validBoard(b))
         {
@@ -192,5 +93,5 @@ public class MiniSolver extends Solver {
         }
         return null;    
     }
-    */
+    
 }

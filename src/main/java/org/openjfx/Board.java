@@ -2,7 +2,7 @@ package org.openjfx;
 
 public class Board 
 {
-    protected final Integer[][] board;
+    protected Integer[][] board;
 
     public Board() //Default 9x9 Grid
     {

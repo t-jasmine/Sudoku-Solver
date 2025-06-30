@@ -13,4 +13,10 @@ public class MiniBoard extends Board
     {
         super(b);
     }
+    
+    public MiniBoard(Board b) //Makes a copy of Board b
+    {
+        super(b);
+    }
+
 }
