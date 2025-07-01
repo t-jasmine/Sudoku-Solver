@@ -172,7 +172,7 @@ public class UI {
                 });
 
                 //When a text field is clicked, set it as the selected cell
-                t.focusedProperty().addListener((observable, oldVal, newVal) -> {
+                t.focusedProperty().addListener((obs, oldVal, newVal) -> {
                     if (newVal) {
                         onCellFocus.accept(col,row);
                         //Style the selected cell

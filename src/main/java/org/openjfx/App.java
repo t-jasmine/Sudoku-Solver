@@ -38,7 +38,6 @@ public class App extends Application {
     //test
     MiniSolver miniSolver = new MiniSolver();
     Board miniInput;
-    Board miniSolution;
 
     //styletextfield
 
@@ -59,13 +58,6 @@ public class App extends Application {
     {
         boardInput = UI.getBoardFromTextFields(textFields);
         solution = s.solve(boardInput);
-    }
-
-    //test
-    private void setMiniSolution()
-    {
-        miniInput = UI.getMiniFromTextFields(miniTextFields);
-        miniSolution = miniSolver.solve(miniInput);
     }
 
     private void solveSelectedCell()
@@ -120,6 +112,21 @@ public class App extends Application {
         }
     }
 
+    private boolean miniComplete()
+    {
+        for(int r = 0; r<4; r++)
+        {
+            for(int c = 0; c<4; c++)
+            {
+                if(miniTextFields[c][r].getText().trim().equals(""))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     private void updateSelectedCell(int c, int r)
     {
         selectedRow = r;
@@ -133,45 +140,32 @@ public class App extends Application {
         GridPane grid = UI.createGrid(miniTextFields, 4, this::updateSelectedCell);
         UI.fillMiniBoard(miniTextFields);
 
-        Button testBtn = new Button("Test");
-        testBtn.setOnAction((ActionEvent event) ->
+        for(int r = 0; r<4; r++)
         {
-
-            /*
-            stage.close();
-            if(toSolve.equals("cell"))
+            for(int c = 0; c<4; c++)
             {
-                solveSelectedCell();
-            }
-            else
-            {
-                solveBoard();
-            }
-            */
-            
-            
-            setMiniSolution();
-            for(int r = 0; r<4; r++)
-            {
-                for(int c = 0; c<4; c++)
-                {               
-                    UI.styleTextField(miniTextFields,c,r,"white");
-                    if(miniSolution!= null)
-                    {     
-                        if(miniTextFields[c][r].getText().trim().equals(""))
-                        {
-                            UI.styleTextField(miniTextFields,c, r, "green");
-                            miniTextFields[c][r].setText(""+miniSolution.get(c,r));
-                        }
-                    }
-                    else
+                miniTextFields[c][r].textProperty().addListener((obs, oldVal, newVal) -> {
+                    if(miniComplete())
                     {
-                        UI.styleTextField(miniTextFields,c, r, "red");
+                        //Checking if the board is correct
+                        miniInput = UI.getMiniFromTextFields(miniTextFields);
+                        if(miniSolver.validBoard(miniInput))
+                        {
+                            stage.close();
+                            if(toSolve.equals("cell"))
+                            {
+                                solveSelectedCell();
+                            }
+                            else
+                            {
+                                solveBoard();
+                            }
+                        }
+
                     }
-                }
+                });
             }
-            
-        });
+        }
 
         //Instruction Text
         Label textLabel = new Label("Solve this mini sudoku to get your solution!");
@@ -180,7 +174,7 @@ public class App extends Application {
 
         VBox vbox = new VBox();
         vbox.setAlignment(Pos.CENTER);
-        vbox.getChildren().addAll(textLabel,grid,testBtn);
+        vbox.getChildren().addAll(textLabel,grid);
         var scene = new Scene(vbox,350,350);
         stage.setScene(scene);
         
