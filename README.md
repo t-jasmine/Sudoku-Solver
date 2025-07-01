@@ -7,7 +7,7 @@ A desktop application to solve sudoku puzzles... but you have to solve a mini su
 After summer break started and I caught myself doing sudoku puzzles until midnight, I had the great idea to tie together my problem-solving hobbies of coding and doing puzzles! Yet, there are already so many sudoku solvers out there, and some extremely intricate, like [this one by Andrew Stuart](https://www.sudokuwiki.org/sudoku.htm), which covers lots of complex sudoku-solving techniques, many of which I've never even heard of. I wanted to make something unique and fun, and what better than a sudoku solver where you still have to work for the solution? 
 
 
-This was my first time trying out JavaFX and Maven build tools, so I followed along [this tutorial](https://www.youtube.com/watch?v=wa4ky1ARDkw&list=PLix7MmR3doRqF712ItSp4IhKwJcvDf5M2) by Professor Donald J. Patterson at Westmont College and put my own twist on things! In addition to the mini sudoku mechanic, I also ...
+This was my first time developing a desktop application and using JavaFX and Maven build tools, so I followed along [this tutorial](https://www.youtube.com/watch?v=wa4ky1ARDkw&list=PLix7MmR3doRqF712ItSp4IhKwJcvDf5M2) by Professor Donald J. Patterson at Westmont College and put my own twist on things! In addition to the mini sudoku mechanic, I also ...
 
 - Added arrow key navigation
 - Added a "Solve Cell" button
