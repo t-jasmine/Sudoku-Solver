@@ -1,6 +1,6 @@
 # Sudoku Solver
-#### ⚠️WIP⚠️
-A desktop application to solve sudoku puzzles... but you have to solve a mini sudoku puzzle before you get your solution!
+
+A desktop application to solve sudoku puzzles... but you have to solve a mini 4x4 sudoku puzzle before you get your solution!
 
 ### This project was made for the Hack Club Athena Award.
 
@@ -15,5 +15,5 @@ This was my first time developing a desktop application and using JavaFX and Mav
     - You'll only be able to type digits 1-9 and should only be able to type in 1 character at a time
     - If another digit is already in a box, typing another digit will easily replace it
 - Modified the appearance of the sudoku grid :3
-- ⚠️ Converted code to an executable file
+- Converted code to an executable file
 - Fixed other minor logic, organization, and UI issues
