@@ -1,8 +1,9 @@
-org\openjfx\App$1.class
+org\openjfx\UI$1.class
 module-info.class
 org\openjfx\Board.class
-org\openjfx\MiniBoard.class
+org\openjfx\UI.class
+org\openjfx\miniSudoku\MiniSolver.class
 org\openjfx\Solver.class
-org\openjfx\MiniSolver.class
+org\openjfx\miniSudoku\MiniBoard.class
 org\openjfx\App.class
 org\openjfx\SystemInfo.class

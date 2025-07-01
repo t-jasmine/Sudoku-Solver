@@ -180,7 +180,7 @@ public class App extends Application {
         
         stage.setResizable(false);
         stage.setTitle("Mini Sudoku!");
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("/Sudoku.jpg")));
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/Sudoku.png")));
         stage.show();
     }
 
@@ -188,7 +188,7 @@ public class App extends Application {
     {
         //Clear Button
         Button clearBtn = new Button("Clear");
-        clearBtn.setFont(UI.textFont);
+        UI.styleButton(clearBtn);
 
         clearBtn.setOnAction((ActionEvent event) -> {
             clearBoard();
@@ -196,7 +196,7 @@ public class App extends Application {
 
         //Solve Cell Button
         Button solveCellBtn = new Button("Solve Cell");
-        solveCellBtn.setFont(UI.textFont);
+        UI.styleButton(solveCellBtn);
 
         solveCellBtn.setOnAction((ActionEvent event) ->
         {
@@ -211,7 +211,8 @@ public class App extends Application {
 
         //Solve Button
         Button solveBtn = new Button("Solve");
-        solveBtn.setFont(UI.textFont);
+        UI.styleButton(solveBtn);
+
         solveBtn.setOnAction((ActionEvent event) -> {
             initMiniSudoku("board");
         });
@@ -241,7 +242,7 @@ public class App extends Application {
         stage.setScene(scene);
         stage.setResizable(false);
         stage.setTitle("Sudoku Solver");
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("/Sudoku.jpg")));
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/Sudoku.png")));
         stage.show();
         vbox.requestFocus();
     }

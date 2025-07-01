@@ -6,9 +6,11 @@ import org.openjfx.miniSudoku.MiniBoard;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
@@ -61,6 +63,18 @@ public class UI {
 
         t.setFont(textFont);
         t.setStyle(style);
+    }
+
+    public static void styleButton(Button b)
+    {
+        b.setFont(textFont);
+        b.setTextFill(Color.WHITE);
+        String style = 
+            "-fx-background-color: rgb(165, 135, 165);"+
+            "-fx-focus-color: transparent;"
+        ;
+
+        b.setStyle(style);
     }
 
     //Board Retrieval Methods
@@ -196,7 +210,6 @@ public class UI {
         MiniBoard b = new MiniBoard();
         b.generateBoard(10); //testing, random val
 
-        
         for(int r = 0; r<fields.length; r++)
         {
             for(int c = 0; c<fields.length; c++)
