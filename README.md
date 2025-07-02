@@ -14,6 +14,7 @@ This was my first time trying out JavaFX and Maven build tools, so I followed al
 - Limited textfield character input
     - You'll only be able to type digits 1-9 and should only be able to type in 1 character at a time
     - If another digit is already in a box, typing another digit will easily replace it
-- Modified the appearance of the sudoku grid :3
-- ⚠️ Converted code to an executable file
+- Modified the appearance of the sudoku grid & other UI
+- Converted code to an executable file
+    -This repository includes a windows installer, so all you have to do is run the installer to use the application :3
 - Fixed other minor logic, organization, and UI issues
