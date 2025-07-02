@@ -24,4 +24,13 @@ To make this project, I used JavaFX and Maven. This was my first time developing
 
 This was an exciting first desktop app project! It was definitely a struggle trying to learn how to use different libraries and figuring out how everything works together. At first, I tried to create an executable file, but I ran into a lot of errors getting it to work on other computers, so I ditched that idea...I think I'll explore it in another project! This project took me more hours than I expected, considering its simplicity, but it was well worth it testing out different features of JavaFX throughout development.
 
+### Screenshots
+
+![sudoku1](https://github.com/user-attachments/assets/1a12337f-a7bc-446d-97c2-52e716f11972)
+
+![minisudoku](https://github.com/user-attachments/assets/0268f32c-504a-434c-a51e-e76472f29add)
+
+![sudoku2](https://github.com/user-attachments/assets/973b8cbe-7ccb-4777-af7e-6ad9a331d447)
+
+
 
