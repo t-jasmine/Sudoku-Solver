@@ -16,5 +16,5 @@ This was my first time developing a desktop application and using JavaFX and Mav
     - If another digit is already in a box, typing another digit will easily replace it
 - Modified the appearance of the sudoku grid & other UI
 - Converted code to an executable file
-    -This repository includes a windows installer, so all you have to do is run the installer to use the application :3
+    -This repository includes a windows installer
 - Fixed other minor logic, organization, and UI issues
