@@ -8,6 +8,19 @@ To start solving, run the App class, or type this in your terminal:
 mvn clean javafx:run
 ```
 
+If you want to run using the executable jar, type this in your terminal:
+
+```
+java -jar target/sudoku-solver-1.0-jar-with-dependencies.jar
+```
+
+If you run into missing JavaFX runtime components errors like I did, run this line instead:
+```
+java --module-path "C:\replace\this\with\your\path\to\javafx-sdk-21.0.7\lib" --add-modules javafx.controls -jar target/sudoku-solver-1.0-jar-with-dependencies.jar
+```
+
+Please note that if your solved board turns red, what you input does not have a valid solution.
+
 ## This project was made for the Hack Club Athena Award.
 
 After summer break started and I caught myself doing sudoku puzzles until midnight, I had the great idea to tie together my problem-solving hobbies of coding and doing puzzles! Yet, there are already so many sudoku solvers out there, and some extremely intricate, like [this one by Andrew Stuart](https://www.sudokuwiki.org/sudoku.htm), which covers lots of complex sudoku-solving techniques, many of which I've never even heard of. I wanted to make something unique and fun, and what better than a sudoku solver where you still have to work for the solution? 
